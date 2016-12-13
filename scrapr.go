@@ -18,7 +18,7 @@ func scrapr(stars float64, rateMin int64, rateMax int64, national bool, women bo
     var body *html.Node
     page := 1
 
-    for ok := true; ok; ok = hasPages(body) {
+    for ok := true; ok; ok = more(body) {
         scrapeUrl := urlCreator(stars, rateMin, rateMax, national, women, page)
         body = readr(scrapeUrl)
         teamMap = append(teamMap, parsr(body)...)
@@ -29,7 +29,7 @@ func scrapr(stars float64, rateMin int64, rateMax int64, national bool, women bo
     return teamMap
 }
 
-func hasPages(body *html.Node) bool {
+func more(body *html.Node) bool {
     matcher := func(n *html.Node) bool {
         if n != nil && n.DataAtom == atom.Li && n.Parent != nil && n.Parent.Parent != nil {
             return scrape.Attr(n, "class") == "next"
@@ -87,7 +87,6 @@ func parsr(body *html.Node) []team {
 
                 case "Team Rating":
                     team.stars = float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star")))) + (float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star-half-o")))) * float64(.5))
-
             }
         }
 
@@ -137,7 +136,6 @@ func urlCreator(stars float64, rateMin int64, rateMax int64, national bool, wome
         } else {
             baseUrl += fmt.Sprintf("stars=%.1f", stars)
         }
-
     }
 
     returnUrl, _ := url.Parse(baseUrl);
