@@ -118,10 +118,12 @@ func readr(scrapeUrl *url.URL) *html.Node {
 func urlCreator(stars float64, rateMin int64, rateMax int64, national bool, women bool, page int) *url.URL {
 
     baseUrl := fmt.Sprintf("https://www.fifaindex.com/teams/%d/?", page)
-    baseUrl += fmt.Sprintf("overallrating_0=%d&overallrating_1=%d&", rateMin, rateMax)
-    baseUrl += fmt.Sprintf("attackrating_0=%d&attackrating_1=%d&", rateMin, rateMax)
-    baseUrl += fmt.Sprintf("midfieldrating_0=%d&midfieldrating_1=%d&", rateMin, rateMax)
-    baseUrl += fmt.Sprintf("defenserating_0=%d&defenserating_1=%d&", rateMin, rateMax)
+    if (rateMin > 0 && rateMax > 0) {
+        baseUrl += fmt.Sprintf("overallrating_0=%d&overallrating_1=%d&", rateMin, rateMax)
+        baseUrl += fmt.Sprintf("attackrating_0=%d&attackrating_1=%d&", rateMin, rateMax)
+        baseUrl += fmt.Sprintf("midfieldrating_0=%d&midfieldrating_1=%d&", rateMin, rateMax)
+        baseUrl += fmt.Sprintf("defenserating_0=%d&defenserating_1=%d&", rateMin, rateMax)
+    }
 
     if national == true {
         baseUrl += "type=1&"

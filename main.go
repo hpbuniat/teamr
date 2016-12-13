@@ -20,6 +20,9 @@ type team struct {
 
 type draw map[string]team
 
+// replace in build-process
+var Version = "???"
+
 func main() {
     var stars float64
     var rateMin int64
@@ -30,25 +33,26 @@ func main() {
     var groups int64
 
     app := cli.NewApp()
+    app.Version = Version
     app.Name = "teamr"
     app.Usage = "football-cup team randomizer"
     app.Flags = []cli.Flag {
         cli.Float64Flag{
             Name:        "stars, s",
-            Value:       4,
+            Value:       0,
             Usage:       "star selection mode",
             Destination: &stars,
         },
         cli.Int64Flag{
             Name:        "min",
             Value:       76,
-            Usage:       "min. rating ovr (att, mid, def)",
+            Usage:       "min. rating ovr, att, mid, def",
             Destination: &rateMin,
         },
         cli.Int64Flag{
             Name:        "max",
             Value:       80,
-            Usage:       "max. rating ovr (att, mid, def)",
+            Usage:       "max. rating ovr, att, mid, def",
             Destination: &rateMax,
         },
         cli.BoolFlag{
@@ -58,7 +62,7 @@ func main() {
         },
         cli.BoolFlag{
             Name:        "women, w",
-            Usage:       "only women teams",
+            Usage:       "only women national teams",
             Destination: &women,
         },
         cli.Int64Flag{
@@ -101,14 +105,14 @@ func main() {
                     fmt.Sprintf("%d", team.ovr),
                     fmt.Sprintf("%.1f", team.stars),
                 }
+
                 table.Append(row)
             }
 
+            fmt.Print("\n")
             fmt.Printf("====== Group %d\n", number)
             table.Render()
-            fmt.Print("\n")
         }
-
 
         return nil
     }

@@ -5,17 +5,19 @@ import (
     "time"
     "math"
     "math/rand"
+    "bufio"
+    "os"
 )
 
 func playr(number int64) []string {
 
     var players []string
 
-    println("Enter player names (confirm each with enter)")
+    println("Enter player names (confirm with enter)")
     for i := int64(0); i < number; i++ {
-        var t string
-        fmt.Printf("Player %d:", i+1)
-        fmt.Scanln(&t)
+        reader := bufio.NewReader(os.Stdin)
+        fmt.Printf("Player %d: ", i+1)
+        t, _ := reader.ReadString('\n')
         players = append(players, t)
     }
 
@@ -23,8 +25,6 @@ func playr(number int64) []string {
 }
 
 func drawr(players []string, teams []team, groups int64) map[int]draw {
-
-    rand.Seed(time.Now().Unix())
 
     group := 1
     groupMax := int(math.Ceil(float64(int64(len(players)) / groups)))
@@ -34,6 +34,7 @@ func drawr(players []string, teams []team, groups int64) map[int]draw {
     drawn[group] = make(draw)
 
     for len(players) > 0 {
+        rand.Seed(time.Now().UnixNano())
         if (len(drawn[group]) >= groupMax) {
             group++
             drawn[group] = make(draw)
