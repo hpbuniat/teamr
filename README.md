@@ -26,6 +26,7 @@ global options:
    --help, -h                 show help
    --version, -v              print the version
 ```
+All selection-options are inclusive, so you will e.g. reset the ratings when using the star-selector only.
 
 ### Example
 ```console
@@ -55,4 +56,4 @@ Will create 2 groups with 4 players each, using 4 star teams only
 ```
 
 ## Credits
-- https://www.fifaindex.com/de/ for their incredible work of providing all the information teamr uses.
+- https://www.fifaindex.com/ for their incredible work of providing all the information teamr uses.
