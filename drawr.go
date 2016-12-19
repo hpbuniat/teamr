@@ -35,7 +35,7 @@ func drawr(players []string, teams []team, groups int64) map[int]draw {
 
     for len(players) > 0 {
         rand.Seed(time.Now().UnixNano())
-        if (len(drawn[group]) >= groupMax) {
+        if (len(drawn[group]) > groupMax) {
             group++
             drawn[group] = make(draw)
         }
