@@ -27,7 +27,7 @@ func playr(number int64) []string {
 func drawr(players []string, teams []team, groups int64) map[int]draw {
 
     group := 1
-    groupMax := int(math.Ceil(float64(int64(len(players)) / groups)))
+    groupMax := int(math.Ceil(float64(len(players)) / float64(groups)))
 
     var drawn map[int]draw
     drawn = make(map[int]draw)
@@ -35,7 +35,7 @@ func drawr(players []string, teams []team, groups int64) map[int]draw {
 
     for len(players) > 0 {
         rand.Seed(time.Now().UnixNano())
-        if (len(drawn[group]) > groupMax) {
+        if (len(drawn[group]) >= groupMax) {
             group++
             drawn[group] = make(draw)
         }
