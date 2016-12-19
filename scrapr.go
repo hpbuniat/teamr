@@ -43,7 +43,7 @@ func more(body *html.Node) bool {
 
 func parsr(body *html.Node) []team {
     teamRowMatcher := func(n *html.Node) bool {
-        if n.DataAtom == atom.Tr && n.Parent != nil && n.Parent.Parent != nil {
+        if n.DataAtom == atom.Tr && scrape.Attr(n, "class") == "" && n.Parent != nil && n.Parent.Parent != nil {
             return strings.Contains(scrape.Attr(n.Parent.Parent, "class"), "teams") && n.Parent.Parent.DataAtom == atom.Table
         }
 
@@ -52,7 +52,7 @@ func parsr(body *html.Node) []team {
 
     teamAttrMatcher := func(n *html.Node) bool {
         if n.DataAtom == atom.Td && n.Parent != nil && n.Parent.Parent != nil {
-            return n.Parent.DataAtom == atom.Tr && scrape.Attr(n, "colspan") != "2"
+            return n.Parent.DataAtom == atom.Tr && scrape.Attr(n, "data-title") != ""
         }
 
         return false
@@ -61,38 +61,39 @@ func parsr(body *html.Node) []team {
     var teams []team
     teamRows := scrape.FindAll(body, teamRowMatcher)
     for _, teamRow := range teamRows {
-        var team team
+        var teamContainer team
         teamAttrs := scrape.FindAll(teamRow, teamAttrMatcher)
         for _, teamAttr := range teamAttrs {
 
             title := scrape.Attr(teamAttr, "data-title")
             switch title {
                 case "Name":
-                    team.name = scrape.Text(teamAttr.FirstChild)
+                    teamContainer.name = scrape.Text(teamAttr.FirstChild)
 
                 case "League":
-                    team.league = scrape.Text(teamAttr.FirstChild)
+                    teamContainer.league = scrape.Text(teamAttr.FirstChild)
 
                 case "ATT":
-                    team.att, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.att, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
 
                 case "MID":
-                    team.mid, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.mid, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
 
                 case "DEF":
-                    team.def, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.def, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
 
                 case "OVR":
-                    team.ovr, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.ovr, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
 
                 case "Team Rating":
-                    team.stars = float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star")))) + (float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star-half-o")))) * float64(.5))
+                    teamContainer.stars = float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star")))) + (float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star-half-o")))) * float64(.5))
             }
         }
 
-        if (len(team.name) > 0) {
+        // there is team with name "none" in the markup :)
+        if (len(teamContainer.name) > 0 && teamContainer.name != "None") {
 
-            teams = append(teams, team)
+            teams = append(teams, teamContainer)
         }
     }
 
