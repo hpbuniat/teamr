@@ -47,10 +47,10 @@ func playr(number int, file string) []string {
     return players
 }
 
-func drawr(players []string, teams []team, groups int) map[int]draw {
+func drawr(players []string, teams *[]team, groups int) map[int]draw {
 
-    if (len(teams) < len(players)) {
-        fmt.Printf("Not enough teams found with given parameters (%d teams for %d players", len(teams), len(players))
+    if (len(*teams) < len(players)) {
+        fmt.Printf("Not enough teams found with given parameters (%d teams for %d players", len(*teams), len(players))
         os.Exit(1);
     }
 
@@ -69,16 +69,16 @@ func drawr(players []string, teams []team, groups int) map[int]draw {
         }
 
         player := rand.Int() % len(players)
-        team := rand.Int() % len(teams)
+        team := rand.Int() % len(*teams)
 
-        drawn[group][players[player]] = teams[team]
+        drawn[group][players[player]] = (*teams)[team]
 
         // remove picked elements
         players[player] = players[len(players)-1]
         players = players[:len(players)-1]
 
-        teams[team] = teams[len(teams)-1]
-        teams = teams[:len(teams)-1]
+        (*teams)[team] = (*teams)[len(*teams)-1]
+        (*teams) = (*teams)[:len(*teams)-1]
     }
 
     return drawn

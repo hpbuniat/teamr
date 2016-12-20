@@ -94,10 +94,10 @@ func main() {
         // re-test amount of players, as one could enter an empty name
         players = len(playerMap)
 
-        drawn := drawr(playerMap, teamMap, groups)
+        drawn := drawr(playerMap, &teamMap, groups)
         printr(drawn)
         for playerMap = playr(1, ""); len(playerMap) > 0; playerMap = playr(1, "") {
-            drawn := drawr(playerMap, teamMap, 1)
+            drawn := drawr(playerMap, &teamMap, 1)
             printr(drawn)
         }
 
