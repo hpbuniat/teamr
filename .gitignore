@@ -23,6 +23,7 @@ _testmain.go
 *.test
 *.prof
 
+.playerfile
 .coverage
 .idea/
 teamr

@@ -79,8 +79,8 @@ func TestMore(t *testing.T) {
 func TestCreatr(t *testing.T) {
     var fixture = []struct {
         stars float64
-        rateMin int64
-        rateMax int64
+        rateMin int
+        rateMax int
         national bool
         women bool
         page int

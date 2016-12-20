@@ -7,24 +7,52 @@ import (
     "math/rand"
     "bufio"
     "os"
+    "strings"
 )
 
-func playr(number int64) []string {
+func playr(number int, file string) []string {
 
     var players []string
 
-    println("Enter player names (confirm with enter)")
-    for i := int64(0); i < number; i++ {
-        reader := bufio.NewReader(os.Stdin)
-        fmt.Printf("Player %d: ", i+1)
-        t, _ := reader.ReadString('\n')
-        players = append(players, t)
+    if (file != "") {
+        file, err := os.Open(file)
+        if err != nil {
+            panic(err)
+        }
+
+        defer file.Close()
+
+        scanner := bufio.NewScanner(file)
+        for scanner.Scan() {
+            t := strings.TrimSpace(scanner.Text())
+            if (t != "") {
+                players = append(players, t)
+            }
+        }
+    } else {
+        println("Enter player names (confirm with enter)")
+        for i := int(0); i < number; i++ {
+            reader := bufio.NewReader(os.Stdin)
+            fmt.Printf("Player %d: ", i + 1)
+            t, _ := reader.ReadString('\n')
+            t = strings.TrimSpace(t)
+
+            _ = "breakpoint"
+            if (t != "") {
+                players = append(players, t)
+            }
+        }
     }
 
     return players
 }
 
-func drawr(players []string, teams []team, groups int64) map[int]draw {
+func drawr(players []string, teams []team, groups int) map[int]draw {
+
+    if (len(teams) < len(players)) {
+        fmt.Printf("Not enough teams found with given parameters (%d teams for %d players", len(teams), len(players))
+        os.Exit(1);
+    }
 
     group := 1
     groupMax := int(math.Ceil(float64(len(players)) / float64(groups)))

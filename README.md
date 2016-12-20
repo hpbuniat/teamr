@@ -16,15 +16,16 @@ Get them [here](http://github.com/hpbuniat/teamr/releases).
 Usage: teamr [global options]
 
 global options:
-   --stars value, -s value    star selection mode (default: 0)
-   --min value                min. rating ovr, att, mid, def (default: 76)
-   --max value                max. rating ovr, att, mid, def (default: 80)
-   --nation, -n               only national teams
-   --women, -w                only women national teams
-   --players value, -p value  number of players (default: 8)
-   --groups value, -g value   number of groups (default: 2)
-   --help, -h                 show help
-   --version, -v              print the version
+   --stars value, -s value       star selection mode (default: 0)
+   --min value                   min. rating ovr, att, mid, def (default: 76)
+   --max value                   max. rating ovr, att, mid, def (default: 80)
+   --players value, -p value     number of players (default: 8)
+   --groups value, -g value      number of groups (default: 2)
+   --playerfile value, -f value  read players from file
+   --nation, -n                  only national teams
+   --women, -w                   only women national teams
+   --help, -h                    show help
+   --version, -v                 print the version
 ```
 All selection-options are inclusive, so you will e.g. reset the ratings when using the star-selector only.
 

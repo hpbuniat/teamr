@@ -12,7 +12,7 @@ import (
     "strconv"
 )
 
-func scrapr(stars float64, rateMin int64, rateMax int64, national bool, women bool) []team {
+func scrapr(stars float64, rateMin int, rateMax int, national bool, women bool) []team {
 
     var teamMap []team
     var body *html.Node
@@ -74,19 +74,23 @@ func parsr(body *html.Node) []team {
                     teamContainer.league = scrape.Text(teamAttr.FirstChild)
 
                 case "ATT":
-                    teamContainer.att, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    t, _ := strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.att = int(t)
 
                 case "MID":
-                    teamContainer.mid, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    t, _ := strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.mid = int(t)
 
                 case "DEF":
-                    teamContainer.def, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    t, _ := strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.def =  int(t)
 
                 case "OVR":
-                    teamContainer.ovr, _ = strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    t, _ := strconv.ParseInt(scrape.Text(teamAttr.FirstChild), 10, 32)
+                    teamContainer.ovr = int(t)
 
                 case "Team Rating":
-                    teamContainer.stars = float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star")))) + (float64(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star-half-o")))) * float64(.5))
+                    teamContainer.stars = float32(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star")))) + (float32(len(scrape.FindAll(teamAttr, scrape.ByClass("fa-star-half-o")))) * float32(.5))
             }
         }
 
@@ -115,7 +119,7 @@ func readr(scrapeUrl *url.URL) *html.Node {
     return body
 }
 
-func creatr(stars float64, rateMin int64, rateMax int64, national bool, women bool, page int) *url.URL {
+func creatr(stars float64, rateMin int, rateMax int, national bool, women bool, page int) *url.URL {
 
     baseUrl := fmt.Sprintf("https://www.fifaindex.com/teams/%d/?", page)
     if (rateMin > 0 && rateMax > 0) {
@@ -132,7 +136,7 @@ func creatr(stars float64, rateMin int64, rateMax int64, national bool, women bo
     }
 
     if (stars > 0) {
-        if (stars == float64(int64(stars))) {
+        if (stars == float64(int(stars))) {
             baseUrl += fmt.Sprintf("stars=%.0f", stars)
         } else {
             baseUrl += fmt.Sprintf("stars=%.1f", stars)
