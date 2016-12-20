@@ -19,7 +19,7 @@ func scrapr(stars float64, rateMin int64, rateMax int64, national bool, women bo
     page := 1
 
     for ok := true; ok; ok = more(body) {
-        scrapeUrl := urlCreatr(stars, rateMin, rateMax, national, women, page)
+        scrapeUrl := creatr(stars, rateMin, rateMax, national, women, page)
         body = readr(scrapeUrl)
         teamMap = append(teamMap, parsr(body)...)
 
@@ -115,7 +115,7 @@ func readr(scrapeUrl *url.URL) *html.Node {
     return body
 }
 
-func urlCreatr(stars float64, rateMin int64, rateMax int64, national bool, women bool, page int) *url.URL {
+func creatr(stars float64, rateMin int64, rateMax int64, national bool, women bool, page int) *url.URL {
 
     baseUrl := fmt.Sprintf("https://www.fifaindex.com/teams/%d/?", page)
     if (rateMin > 0 && rateMax > 0) {
