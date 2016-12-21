@@ -7,6 +7,7 @@ import (
     "github.com/olekukonko/tablewriter"
 )
 
+// printr prints the team assignment for all players per group
 func printr(drawn map[int]draw) {
     for number, group := range drawn {
         table := tablewriter.NewWriter(os.Stdout)

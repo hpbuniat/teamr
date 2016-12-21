@@ -10,6 +10,7 @@ import (
     "strings"
 )
 
+// playr collects the participating players, by reading either a text-file or querying them via stdin
 func playr(number int, file string) []string {
 
     var players []string
@@ -47,6 +48,8 @@ func playr(number int, file string) []string {
     return players
 }
 
+// drawr does the actual drawing, by picking a random team for a random player.
+// The result will be added to a group, starting with group 1, until the group is "filled".
 func drawr(players []string, teams *[]team, groups int) map[int]draw {
 
     if (len(*teams) < len(players)) {

@@ -12,6 +12,8 @@ import (
     "strconv"
 )
 
+// scrapr wraps all internal functions to collect all teams matching the search by querying fifaindex.com.
+// The page is increased internally until there are no pages left.
 func scrapr(stars float64, rateMin int, rateMax int, national bool, women bool) []team {
 
     var teamMap []team
@@ -29,6 +31,7 @@ func scrapr(stars float64, rateMin int, rateMax int, national bool, women bool) 
     return teamMap
 }
 
+// more is a internal helper to determine, if there are more pages to query
 func more(body *html.Node) bool {
     matcher := func(n *html.Node) bool {
         if n != nil && n.DataAtom == atom.Li && n.Parent != nil && n.Parent.Parent != nil {
@@ -41,6 +44,8 @@ func more(body *html.Node) bool {
     return (body != nil && len(scrape.FindAll(body, matcher)) > 0)
 }
 
+// parsr does the actual parsing of teams & attributes.
+// The result is a list of teams.
 func parsr(body *html.Node) []team {
     teamRowMatcher := func(n *html.Node) bool {
         if n.DataAtom == atom.Tr && scrape.Attr(n, "class") == "" && n.Parent != nil && n.Parent.Parent != nil {
@@ -104,6 +109,7 @@ func parsr(body *html.Node) []team {
     return teams
 }
 
+// readr does the actual querying of fifaindex.com and parses the response-body into a html.Node
 func readr(scrapeUrl *url.URL) *html.Node {
     println(fmt.Sprintf("Fetching: %s", scrapeUrl.String()))
     resp, err := http.Get(scrapeUrl.String())
@@ -119,6 +125,7 @@ func readr(scrapeUrl *url.URL) *html.Node {
     return body
 }
 
+// creatr builds the fully-qualified URL to query fifaindex.com
 func creatr(stars float64, rateMin int, rateMax int, national bool, women bool, page int) *url.URL {
 
     baseUrl := fmt.Sprintf("https://www.fifaindex.com/teams/%d/?", page)

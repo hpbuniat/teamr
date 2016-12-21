@@ -7,6 +7,7 @@ import (
     "github.com/urfave/cli"
 )
 
+// team represents all necessary attributes of a football-team
 type team struct {
     name string
     league string
@@ -17,11 +18,13 @@ type team struct {
     stars float32
 }
 
+// draw allows the assignment of a team to each player
 type draw map[string]team
 
 // replace in build-process
 var Version = "???"
 
+// Enter the cli-program
 func main() {
     var stars float64
     var rateMin int
